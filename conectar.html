@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Conectar TikTok</title><link rel="stylesheet" href="estilo.css">
+<style>.btn{display:inline-block;margin-top:16px;padding:14px 22px;border-radius:10px;background:var(--acento);color:#fff;text-decoration:none;font-weight:600}</style></head>
+<body><main>
+<h1>GTA Publicador</h1>
+<p>Conectá la cuenta de TikTok del equipo para enviar los clips aprobados como <strong>borradores</strong> a la bandeja de TikTok. Nada se publica sin que lo revises en la app.</p>
+<p>Permisos que se piden: ver el nombre y la foto de la cuenta (<code>user.info.basic</code>) y subir videos como borrador (<code>video.upload</code>).</p>
+<a class="btn" id="btn" href="#">Conectar TikTok</a>
+<p id="aviso" hidden>Abrí esta página desde el conector del equipo.</p>
+</main>
+<script>
+const q = new URLSearchParams(location.search);
+const ck = q.get('ck'), port = q.get('port');
+if (!ck || !/^\d+$/.test(port || '')) { document.getElementById('btn').hidden = true; document.getElementById('aviso').hidden = false; }
+else {
+  const state = 'local-' + port + '-' + crypto.getRandomValues(new Uint32Array(2)).join('');
+  document.getElementById('btn').href = 'https://www.tiktok.com/v2/auth/authorize/?' + new URLSearchParams({
+    client_key: ck, response_type: 'code', scope: 'user.info.basic,video.upload',
+    redirect_uri: 'https://contentgtagroup-star.github.io/callback.html', state });
+}
+</script></body></html>

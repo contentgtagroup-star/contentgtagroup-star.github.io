@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Cuenta conectada</title><link rel="stylesheet" href="estilo.css">
+<style>.cuenta{display:flex;align-items:center;gap:16px;margin:24px 0}.cuenta img{width:72px;height:72px;border-radius:50%}</style></head>
+<body><main>
+<h1>Cuenta conectada ✓</h1>
+<div class="cuenta"><img id="foto" alt="" hidden><div><strong id="nombre"></strong><p id="red"></p></div></div>
+<p>Los clips que apruebe el equipo se van a enviar como <strong>borradores</strong> a la bandeja de TikTok de esta cuenta. Para publicarlos, abrí TikTok → Bandeja de entrada → borrador → revisar y publicar.</p>
+<p id="error" hidden></p>
+</main>
+<script>
+const q = new URLSearchParams(location.search);
+if (q.get('error')) { document.querySelector('h1').textContent = 'No se pudo conectar'; const e = document.getElementById('error'); e.hidden = false; e.textContent = q.get('error'); }
+document.getElementById('nombre').textContent = q.get('user') || '';
+document.getElementById('red').textContent = q.get('red') || 'TikTok';
+const a = q.get('avatar'); if (a && a.startsWith('https://')) { const f = document.getElementById('foto'); f.src = a; f.hidden = false; }
+</script></body></html>

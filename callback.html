@@ -5,13 +5,17 @@
 <body><main>
 <h1>Conexión de GTA Publicador</h1>
 <div id="ok" hidden><p>Autorización recibida. Copiá este código y pegalo en la terminal (vence en pocos minutos):</p><code id="codigo"></code><button id="copiar">Copiar código</button></div>
+<div id="enviando" hidden><p>Autorización recibida. Terminando la conexión…</p></div>
 <div id="error" hidden><p>La autorización no se completó: <span id="detalle"></span></p></div>
 <div id="nada"><p>Esta página solo se usa al conectar cuentas.</p></div>
 </main>
 <script>
 const p = new URLSearchParams(location.search);
-const code = p.get('code'), err = p.get('error');
-if (code) { document.getElementById('nada').hidden = true; document.getElementById('ok').hidden = false; document.getElementById('codigo').textContent = code;
+const code = p.get('code'), err = p.get('error'), state = p.get('state') || '';
+const m = state.match(/^local-(\d+)-/);
+const show = (id) => { document.getElementById('nada').hidden = true; document.getElementById(id).hidden = false; };
+if (m && (code || err)) { show('enviando'); location.replace('http://127.0.0.1:' + m[1] + '/' + location.search); }
+else if (code) { show('ok'); document.getElementById('codigo').textContent = code;
   document.getElementById('copiar').onclick = () => navigator.clipboard.writeText(code).then(() => { document.getElementById('copiar').textContent = 'Copiado ✓'; }); }
-else if (err) { document.getElementById('nada').hidden = true; document.getElementById('error').hidden = false; document.getElementById('detalle').textContent = err + ' ' + (p.get('error_description') || ''); }
+else if (err) { show('error'); document.getElementById('detalle').textContent = err + ' ' + (p.get('error_description') || ''); }
 </script></body></html>
